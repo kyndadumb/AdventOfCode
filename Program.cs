@@ -7,6 +7,10 @@
             Console.WriteLine("Day 01:\n");
             DayOne.SolvePartOne();
             DayOne.SolvePartTwo();
+
+            Console.WriteLine("\nDay 02:\n");
+            DayTwo.SolvePartOne();
+
         }
     }
 }
