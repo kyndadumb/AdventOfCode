@@ -26,7 +26,7 @@ namespace AdventOfCode
                 int current_game_id = int.Parse(match_line.Groups[1].Value);
                 
                 // if => Split inputs by semicolon
-                if (TestGame(match_line.Groups[2].Value.Split(";")) == true)
+                if (TestStoneCountPerColor(match_line.Groups[2].Value.Split(";")) == true)
                 {
                     // add game ids for solution
                     total += current_game_id;
@@ -36,7 +36,7 @@ namespace AdventOfCode
             Console.WriteLine($"Solution for Part 1: {total}");
         }
 
-        public static bool TestGame(string[] inputs)
+        public static bool TestStoneCountPerColor(string[] inputs)
         {
             // loop through all inputs
             foreach (string input in inputs)
@@ -67,7 +67,51 @@ namespace AdventOfCode
 
         public static void SolvePartTwo()
         {
+            int total = 0;
 
+            // loop through every line and find power of rock count
+            foreach (string line in DayTwo.input)
+            {
+                Match line_match = Regex.Match(line.Trim(), @"Game \d+: (.*)");
+                total += FindRockCountPower(line_match.Groups[1].Value.Split(";"));
+            }
+
+            Console.WriteLine($"Solution for Part 2: {total}");
+
+        }
+
+        public static int FindRockCountPower(string[] inputs)
+        {
+            int red = 0;
+            int green = 0;
+            int blue = 0;
+
+            // loop through all inputs
+            foreach (string input in inputs)
+            {
+                // split input by comma
+                foreach (string n in input.Split(','))
+                {
+                    // get count of rocks and color
+                    Match match = Regex.Match(n.Trim(), @"(\d+) (.*)");
+                    int rock_count = int.Parse(match.Groups[1].Value);
+                    string rock_color = match.Groups[2].Value;
+
+                    // find lowest rock count per color
+                    switch (rock_color)
+                    {
+                        case "red":
+                            if (rock_count > red) red = rock_count; break;
+                        case "green":
+                            if (rock_count > green) green = rock_count; break;
+                        case "blue":
+                            if (rock_count > blue) blue = rock_count; break;
+                    }
+                }
+            }
+
+            // return power
+            return red * green * blue;
         }
     }
 }
