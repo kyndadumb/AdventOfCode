@@ -32,7 +32,7 @@ namespace AdventOfCode
                     int firstnumber = int.Parse(matches[0].Value);
                     
                     // parse second number if found, else take first number again
-                    int lastnumber = matches.Count > 1 ? int.Parse(matches[matches.Count - 1].Value) : firstnumber;
+                    int lastnumber = matches.Count > 1 ? int.Parse(matches[^1].Value) : firstnumber;
                     
                     // calculate sum of line and add to total
                     int sum = (firstnumber * 10) + lastnumber;
@@ -47,66 +47,49 @@ namespace AdventOfCode
         // solution for part 2
         public static void SolvePartTwo()
         {
-            Regex numbers_and_figures = new(@"\d|one|two|three|four|five|six|seven|eight|nine");
+            // replace missing letters in input and replace numbers
+            for (int i = 0; i < input.Length; i++)
+            {
+                input[i] = input[i].Replace("one", "o1e");
+                input[i] = input[i].Replace("two", "t2o");
+                input[i] = input[i].Replace("three", "th3e");
+                input[i] = input[i].Replace("four", "4");
+                input[i] = input[i].Replace("five", "5e");
+                input[i] = input[i].Replace("six", "6");
+                input[i] = input[i].Replace("seven", "7n");
+                input[i] = input[i].Replace("eight", "e8t");
+                input[i] = input[i].Replace("nine", "n9e");
+            }
+
+            Regex numbers_regex = new(@"\d");
             int total = 0;
 
             foreach (string line in input)
             {
-                MatchCollection matches = numbers_and_figures.Matches(line);
+                MatchCollection matches = numbers_regex.Matches(line);
 
                 // if => more than 0 numbers in line
                 if (matches.Count > 0)
                 {
-                    // Use a list to store the individual digits
-                    List<int> numbers = new List<int>();
+                    List<int> numbers = new();
 
                     foreach (Match match in matches)
                     {
-                        numbers.Add(GetNumber(match.Value));
+                        numbers.Add(int.Parse(match.Value));
                     }
 
-                    // The first number is the first element in the list
                     int firstnumber = numbers[0];
 
-                    // The last number is the last element in the list
-                    int lastnumber = numbers[numbers.Count - 1];
+                    // last element of list
+                    int lastnumber = numbers[^1];
 
                     // calculate sum of line and add to total
                     int sum = (firstnumber * 10) + lastnumber;
                     total += sum;
                 }
             }
-
-            // 54533
+            // 54518
             Console.WriteLine($"Solution for Part 2: {total}");
-        }
-
-        // Get Number from spelled out value
-        static int GetNumber(string num)
-        {
-            // if - Input = Integer ==> return input
-            if (int.TryParse(num, out int result))
-            {
-                return result;
-            }
-            
-            // else - return number from figures
-            else
-            {
-                switch (num)
-                {
-                    case "one": return 1;
-                    case "two": return 2;
-                    case "three": return 3;
-                    case "four": return 4;
-                    case "five": return 5;
-                    case "six": return 6;
-                    case "seven": return 7;
-                    case "eight": return 8;
-                    case "nine": return 9;
-                    default: return 0;
-                }
-            }
         }
     }
 }
