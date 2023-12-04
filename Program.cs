@@ -12,6 +12,9 @@
             DayTwo.SolvePartOne();
             DayTwo.SolvePartTwo();
 
+            Console.WriteLine("\nDay 04:\n");
+            DayFour.SolvePartOne();
+            DayFour.SolvePartTwo();
         }
     }
 }
